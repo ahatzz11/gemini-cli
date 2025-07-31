@@ -618,28 +618,26 @@ describe('vim-buffer-actions', () => {
     });
 
     describe('vim_open_line_below', () => {
-      it('should insert newline at end of current line', () => {
+      it('should insert a new line below the current one', () => {
         const state = createTestState(['hello world'], 0, 5);
         const action = { type: 'vim_open_line_below' as const };
 
         const result = handleVimAction(state, action);
 
-        // The implementation inserts newline at end of current line and cursor moves to column 0
-        expect(result.lines[0]).toBe('hello world\n');
-        expect(result.cursorRow).toBe(0);
-        expect(result.cursorCol).toBe(0); // Cursor position after replaceRangeInternal
+        expect(result.lines).toEqual(['hello world', '']);
+        expect(result.cursorRow).toBe(1);
+        expect(result.cursorCol).toBe(0);
       });
     });
 
     describe('vim_open_line_above', () => {
-      it('should insert newline before current line', () => {
+      it('should insert a new line above the current one', () => {
         const state = createTestState(['hello', 'world'], 1, 2);
         const action = { type: 'vim_open_line_above' as const };
 
         const result = handleVimAction(state, action);
 
-        // The implementation inserts newline at beginning of current line
-        expect(result.lines).toEqual(['hello', '\nworld']);
+        expect(result.lines).toEqual(['hello', '', 'world']);
         expect(result.cursorRow).toBe(1);
         expect(result.cursorCol).toBe(0);
       });
